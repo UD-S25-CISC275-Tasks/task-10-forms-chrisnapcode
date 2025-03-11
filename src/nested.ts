@@ -20,7 +20,7 @@ export function getNonEmptyQuestions(questions: Question[]): Question[] {
         (question: Question) =>
             question.body !== "" ||
             question.expected !== "" ||
-            question.options.length > 0,
+            question.options.length > 0
     );
 }
 
@@ -30,7 +30,7 @@ export function getNonEmptyQuestions(questions: Question[]): Question[] {
  */
 export function findQuestion(
     questions: Question[],
-    id: number,
+    id: number
 ): Question | null {
     return questions.find((question: Question) => question.id === id) || null;
 }
@@ -57,7 +57,7 @@ export function getNames(questions: Question[]): string[] {
 export function sumPoints(questions: Question[]): number {
     return questions.reduce(
         (total: number, question: Question) => total + question.points,
-        0,
+        0
     );
 }
 
@@ -69,7 +69,7 @@ export function sumPublishedPoints(questions: Question[]): number {
         .filter((question: Question) => question.published)
         .reduce(
             (total: number, question: Question) => total + question.points,
-            0,
+            0
         );
 }
 
@@ -94,7 +94,7 @@ export function toCSV(questions: Question[]): string {
     const header = "id,name,options,points,published";
     const rows = questions.map(
         (question: Question) =>
-            `${question.id},${question.name},${question.options.length},${question.points},${question.published}`,
+            `${question.id},${question.name},${question.options.length},${question.points},${question.published}`
     );
     return [header, ...rows].join("\n");
 }
@@ -109,7 +109,7 @@ export function makeAnswers(questions: Question[]): Answer[] {
         questionId: question.id,
         text: "",
         submitted: false,
-        correct: false,
+        correct: false
     }));
 }
 
@@ -120,7 +120,7 @@ export function makeAnswers(questions: Question[]): Answer[] {
 export function publishAll(questions: Question[]): Question[] {
     return questions.map((question: Question) => ({
         ...question,
-        published: true,
+        published: true
     }));
 }
 
@@ -143,7 +143,7 @@ export function addNewQuestion(
     questions: Question[],
     id: number,
     name: string,
-    type: QuestionType,
+    type: QuestionType
 ): Question[] {
     const newQuestion = makeBlankQuestion(id, name, type);
     return [...questions, newQuestion];
@@ -157,10 +157,10 @@ export function addNewQuestion(
 export function renameQuestionById(
     questions: Question[],
     targetId: number,
-    newName: string,
+    newName: string
 ): Question[] {
     return questions.map((question: Question) =>
-        question.id === targetId ? { ...question, name: newName } : question,
+        question.id === targetId ? { ...question, name: newName } : question
     );
 }
 
@@ -174,19 +174,19 @@ export function renameQuestionById(
 export function changeQuestionTypeById(
     questions: Question[],
     targetId: number,
-    newQuestionType: QuestionType,
+    newQuestionType: QuestionType
 ): Question[] {
     return questions.map((question: Question) =>
-        question.id === targetId ?
-            {
-                ...question,
-                type: newQuestionType,
-                options:
-                    newQuestionType !== "multiple_choice_question" ?
-                        []
-                    :   question.options,
-            }
-        :   question,
+        question.id === targetId
+            ? {
+                  ...question,
+                  type: newQuestionType,
+                  options:
+                      newQuestionType !== "multiple_choice_question"
+                          ? []
+                          : question.options
+              }
+            : question
     );
 }
 
@@ -204,13 +204,13 @@ export function changeQuestionTypeById(
 function updateOptions(
     options: string[],
     targetOptionIndex: number,
-    newOption: string,
+    newOption: string
 ): string[] {
     if (targetOptionIndex === -1) {
         return [...options, newOption];
     } else if (targetOptionIndex >= 0 && targetOptionIndex < options.length) {
         return options.map((option, index) =>
-            index === targetOptionIndex ? newOption : option,
+            index === targetOptionIndex ? newOption : option
         );
     }
 
@@ -221,19 +221,19 @@ export function editOption(
     questions: Question[],
     targetId: number,
     targetOptionIndex: number,
-    newOption: string,
+    newOption: string
 ): Question[] {
     return questions.map((question: Question) =>
-        question.id === targetId ?
-            {
-                ...question,
-                options: updateOptions(
-                    question.options,
-                    targetOptionIndex,
-                    newOption,
-                ),
-            }
-        :   question,
+        question.id === targetId
+            ? {
+                  ...question,
+                  options: updateOptions(
+                      question.options,
+                      targetOptionIndex,
+                      newOption
+                  )
+              }
+            : question
     );
 }
 
@@ -246,7 +246,7 @@ export function editOption(
 export function duplicateQuestionInArray(
     questions: Question[],
     targetId: number,
-    newId: number,
+    newId: number
 ): Question[] {
     const index = questions.findIndex((question) => question.id === targetId);
     if (index === -1) return questions;
@@ -256,6 +256,6 @@ export function duplicateQuestionInArray(
     return [
         ...questions.slice(0, index + 1),
         duplicatedQuestion,
-        ...questions.slice(index + 1),
+        ...questions.slice(index + 1)
     ];
 }
